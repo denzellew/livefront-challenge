@@ -33,16 +33,19 @@ namespace CartonCaps.ReferralFeature.Repositories
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
+            await SaveChangesAsync();
         }
 
         public async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
+            await SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
+            await SaveChangesAsync();
         }
 
         public async Task SaveChangesAsync()

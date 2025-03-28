@@ -1,4 +1,12 @@
 using CartonCaps;
+using CartonCaps.ReferralFeature.Data;
+using CartonCaps.ReferralFeature.Repositories;
+using CartonCaps.ReferralFeature.Repositories.Interfaces;
+using CartonCaps.ReferralFeature.Services;
+using CartonCaps.ReferralFeature.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,16 +15,51 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
+// Add DbContext
+builder.Services.AddDbContext<ReferralDbContext>(options =>
+    options.UseInMemoryDatabase("ReferralDb"));
+
+// Register repositories
+builder.Services.AddScoped<IReferralCodeRepository, ReferralCodeRepository>();
+builder.Services.AddScoped<IReferralRepository, ReferralRepository>();
+
+// Register services
+builder.Services.AddScoped<IReferralService, ReferralService>();
+
+// Add authentication services
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    // Configure JWT Bearer Auth to expect certain parameters
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = false,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseMiddleware<FakeJwtUserMiddleware>();
+    app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
+
+// Add authentication middleware
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

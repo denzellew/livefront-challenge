@@ -1,4 +1,5 @@
 using System;
+using CartonCaps.ReferralFeature.Data;
 using CartonCaps.ReferralFeature.Models;
 using CartonCaps.ReferralFeature.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ namespace CartonCaps.ReferralFeature.Repositories;
 
 public class ReferralCodeRepository : BaseRepository<ReferralCode>, IReferralCodeRepository
 {
-    public ReferralCodeRepository(DbContext context) : base(context)
+    public ReferralCodeRepository(ReferralDbContext context) : base(context)
     {
     }
 

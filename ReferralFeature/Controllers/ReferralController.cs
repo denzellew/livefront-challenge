@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CartonCaps.ReferralFeature.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ReferralController : ControllerBase
 {
     private readonly ILogger<ReferralController> _logger;
