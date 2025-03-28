@@ -56,11 +56,12 @@ if (app.Environment.IsDevelopment())
     app.UseMiddleware<FakeJwtUserMiddleware>();
     app.MapOpenApi();
 }
+app.UseHttpsRedirection();
 
-if (app.Environment.IsProduction())
-{
-    app.UseHttpsRedirection();
-}
+// if (app.Environment.IsProduction())
+// {
+//     
+// }
 
 // Add authentication middleware
 app.UseAuthentication();

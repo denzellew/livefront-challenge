@@ -1,22 +1,40 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartonCaps", "CartonCaps.csproj", "{89E60B39-E79D-BC2E-5571-1992DB38D8C7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartonCaps", "src\CartonCaps.csproj", "{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{89E60B39-E79D-BC2E-5571-1992DB38D8C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89E60B39-E79D-BC2E-5571-1992DB38D8C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89E60B39-E79D-BC2E-5571-1992DB38D8C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89E60B39-E79D-BC2E-5571-1992DB38D8C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Debug|x64.Build.0 = Debug|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Debug|x86.Build.0 = Debug|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Release|x64.ActiveCfg = Release|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Release|x64.Build.0 = Release|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Release|x86.ActiveCfg = Release|Any CPU
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D8921ABC-4B67-43E2-B1B3-9A7946BE8145} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {62A37EBC-9D60-451C-B3A9-EA7D87AD4347}

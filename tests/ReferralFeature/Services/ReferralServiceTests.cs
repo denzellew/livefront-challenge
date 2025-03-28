@@ -4,7 +4,7 @@ using CartonCaps.ReferralFeature.Repositories.Interfaces;
 using Moq;
 using Xunit;
 
-namespace CartonCaps.ReferralFeature.Services.Tests
+namespace CartonCaps.Tests.ReferralFeature.Services
 {
     public class ReferralServiceTests
     {
