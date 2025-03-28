@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace carton_caps_referral.Repositories.Interfaces
+namespace CartonCaps.ReferralFeature.Repositories.Interfaces
 {
     public interface IBaseRepository<T> where T : class
     {

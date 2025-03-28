@@ -1,7 +1,8 @@
-using System;
 using System.Linq.Expressions;
-using carton_caps_referral.Repositories.Interfaces;
-namespace carton_caps_referral.Repositories
+using CartonCaps.ReferralFeature.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace CartonCaps.ReferralFeature.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {

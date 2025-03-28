@@ -1,18 +1,20 @@
-using carton_caps_referral.Models.Enums;
+using CartonCaps.ReferralFeature.Models.Enums;
 
-namespace carton_caps_referral.Models
+namespace CartonCaps.ReferralFeature.Models;
+
+public class Referral
 {
-    public class Referral
-    {
-        public required string Id { get; set; }
-        public required string ReferrerId { get; set; }
+    public required Guid Id { get; set; }
+    public required Guid ReferralCodeId { get; set; }
 
-        public required string ReferreeId { get; set; }
+    public required Guid ReferreeId { get; set; }
 
-        public ReferralStatus Status { get; set; }
+    public ReferralStatus Status { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-        public DateTime? CompletedAt { get; set; }
-    }
+    public DateTime? CompletedAt { get; set; }
+
+    public virtual ReferralCode? ReferralCode { get; set; }
 }
+

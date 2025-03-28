@@ -1,4 +1,4 @@
-namespace carton_caps_referral.Models.Enums
+namespace CartonCaps.ReferralFeature.Models.Enums
 {
     public enum ReferralStatus
     {

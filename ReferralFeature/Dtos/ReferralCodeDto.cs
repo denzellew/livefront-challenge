@@ -1,6 +1,4 @@
-using System;
-
-namespace carton_caps_referral.Dtos
+namespace CartonCaps.ReferralFeature.Dtos
 {
     public class ReferralCodeDto
     {

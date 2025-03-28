@@ -1,8 +1,7 @@
-using System;
-using carton_caps_referral.Models;
-using carton_caps_referral.Services.Interfaces;
+using CartonCaps.ReferralFeature.Models;
+using CartonCaps.ReferralFeature.Services.Interfaces;
 
-namespace carton_caps_referral.Services
+namespace CartonCaps.ReferralFeature.Services
 {
     public class ReferralService : IReferralService
     {

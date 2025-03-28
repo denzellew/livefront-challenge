@@ -1,9 +1,9 @@
 using System.Security.Claims;
-using carton_caps_referral.Services.Interfaces;
+using CartonCaps.ReferralFeature.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace carton_caps_referral.Controllers;
+namespace CartonCaps.ReferralFeature.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -25,16 +25,20 @@ public class ReferralController : ControllerBase
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
         {
+            _logger.LogWarning("Unauthorized access attempt to GetReferralCode");
             return Unauthorized();
         }
 
         try
         {
+            _logger.LogInformation("Getting referral code for user {UserId}", userId);
             var referralCode = _referralService.GetUserReferralCode(Guid.Parse(userId));
+            _logger.LogInformation("Successfully retrieved referral code for user {UserId}", userId);
             return Ok(referralCode);
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error getting referral code for user {UserId}", userId);
             return StatusCode(500, ex.Message);
         }
     }
@@ -46,16 +50,20 @@ public class ReferralController : ControllerBase
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
         {
+            _logger.LogWarning("Unauthorized access attempt to GetReferrals");
             return Unauthorized();
         }
 
         try
         {
+            _logger.LogInformation("Getting referrals for user {UserId}", userId);
             var referrals = _referralService.GetUserReferrals(Guid.Parse(userId));
+            _logger.LogInformation("Successfully retrieved referrals for user {UserId}", userId);
             return Ok(referrals);
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error getting referrals for user {UserId}", userId);
             return StatusCode(500, ex.Message);
         }
     }
@@ -67,16 +75,20 @@ public class ReferralController : ControllerBase
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
         {
+            _logger.LogWarning("Unauthorized access attempt to GenerateReferralShortLink");
             return Unauthorized();
         }
 
         try
         {
+            _logger.LogInformation("Generating referral short link for user {UserId}", userId);
             var referralShortLink = _referralService.GenerateReferralShortLink(Guid.Parse(userId));
+            _logger.LogInformation("Successfully generated referral short link for user {UserId}", userId);
             return Ok(referralShortLink);
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error generating referral short link for user {UserId}", userId);
             return StatusCode(500, ex.Message);
         }
     }
