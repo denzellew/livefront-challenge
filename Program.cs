@@ -1,3 +1,5 @@
+using CartonCaps;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,6 +13,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseMiddleware<FakeJwtUserMiddleware>();
 }
 
 app.UseHttpsRedirection();
