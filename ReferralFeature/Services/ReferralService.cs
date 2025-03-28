@@ -109,6 +109,7 @@ namespace CartonCaps.ReferralFeature.Services
             // Save the referral
 
             // Return the referral
+            await Task.CompletedTask;
             throw new NotImplementedException();
         }
 
@@ -123,6 +124,7 @@ namespace CartonCaps.ReferralFeature.Services
             // Save the referral
 
             // Return the referral
+            await Task.CompletedTask;
             throw new NotImplementedException();
         }
     }
