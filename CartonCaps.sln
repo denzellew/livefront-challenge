@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartonCaps", "CartonCaps.csproj", "{89E60B39-E79D-BC2E-5571-1992DB38D8C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89E60B39-E79D-BC2E-5571-1992DB38D8C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89E60B39-E79D-BC2E-5571-1992DB38D8C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89E60B39-E79D-BC2E-5571-1992DB38D8C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89E60B39-E79D-BC2E-5571-1992DB38D8C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {62A37EBC-9D60-451C-B3A9-EA7D87AD4347}
+	EndGlobalSection
+EndGlobal
