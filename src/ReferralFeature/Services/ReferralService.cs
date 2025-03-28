@@ -36,7 +36,7 @@ namespace CartonCaps.ReferralFeature.Services
             if (referralCode == null)
             {
                 _logger.LogInformation("No existing referral code found for user {UserId}, generating new code", userId);
-                var code = "";
+                string code = "";
 
                 for (int attempts = 0; attempts < 10; attempts++)
                 {
@@ -49,6 +49,7 @@ namespace CartonCaps.ReferralFeature.Services
                     {
                         break;
                     }
+                    code = "";
                     _logger.LogDebug("Generated code {Code} already exists, retrying", code);
                 }
 
@@ -86,15 +87,29 @@ namespace CartonCaps.ReferralFeature.Services
         {
             _logger.LogInformation("Generating referral short link for user {UserId}", userId);
 
-            var referralCode = await GetUserReferralCode(userId);
-
-            if (referralCode == null)
+            string referralCode;
+            try
             {
-                _logger.LogError("Failed to generate referral code for user {UserId}", userId);
-                throw new Exception("Failed to generate a referral code");
+                referralCode = await GetUserReferralCode(userId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Failed to get referral code for user {UserId}: {ErrorMessage}", userId, ex.Message);
+                throw new Exception("Failed to generate a short link");
             }
 
-            var deepLink = await _deepLinkService.GenerateDeepLinkAsync(referralCode);
+
+            string deepLink;
+            try
+            {
+                deepLink = await _deepLinkService.GenerateDeepLinkAsync(referralCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Failed to generate deep link for user {UserId}: {ErrorMessage}", userId, ex.Message);
+                throw new Exception("Failed to generate a short link");
+            }
+
             _logger.LogInformation("Generated deep link for user {UserId} with code {Code}", userId, referralCode);
 
             return deepLink;

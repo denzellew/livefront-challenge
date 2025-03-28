@@ -1,8 +1,9 @@
 using CartonCaps.ReferralFeature.Integrations.Interfaces;
 using CartonCaps.ReferralFeature.Models;
 using CartonCaps.ReferralFeature.Repositories.Interfaces;
+using CartonCaps.ReferralFeature.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
 
 namespace CartonCaps.Tests.ReferralFeature.Services
 {
@@ -42,8 +43,6 @@ namespace CartonCaps.Tests.ReferralFeature.Services
                 Id = Guid.NewGuid(),
                 UserId = userId,
                 Code = "ABC123",
-                CreatedAt = DateTime.UtcNow,
-                Referrals = new List<Referral>()
             };
 
             _mockReferralCodeRepository.Setup(r => r.GetLatestByUserIdAsync(userId))
@@ -86,6 +85,22 @@ namespace CartonCaps.Tests.ReferralFeature.Services
             Assert.Equal(generatedCode, result);
             _mockReferralCodeRepository.Verify(r => r.AddAsync(It.Is<ReferralCode>(rc =>
                 rc.UserId == userId && rc.Code == generatedCode)), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetUserReferralCode_MaxAttemptsExceeded_ThrowsException()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            _mockReferralCodeRepository.Setup(r => r.GetLatestByUserIdAsync(userId))
+                .ReturnsAsync((ReferralCode)null);
+            _mockReferralCodeRepository.Setup(r => r.GetByCodeAsync(It.IsAny<string>()))
+                .ReturnsAsync(new ReferralCode() { Id = Guid.NewGuid(), Code = "DUPLICATE", UserId = userId });
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<Exception>(
+                () => _service.GetUserReferralCode(userId));
+            Assert.Equal("Failed to generate a unique referral code", exception.Message);
         }
 
         [Fact]
@@ -153,6 +168,21 @@ namespace CartonCaps.Tests.ReferralFeature.Services
         }
 
         [Fact]
+        public async Task GetUserReferrals_EmptyList_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            _mockReferralCodeRepository.Setup(r => r.GetAllUserReferralsAsync(userId))
+                .ReturnsAsync(new List<ReferralCode>());
+
+            // Act
+            var result = await _service.GetUserReferrals(userId);
+
+            // Assert
+            Assert.Empty(result);
+        }
+
+        [Fact]
         public async Task GenerateReferralShortLink_Success_ReturnsDeepLink()
         {
             // Arrange
@@ -195,7 +225,24 @@ namespace CartonCaps.Tests.ReferralFeature.Services
             // Act & Assert
             var exception = await Assert.ThrowsAsync<Exception>(
                 () => _service.GenerateReferralShortLink(userId));
-            Assert.Equal("Failed to generate a referral code", exception.Message);
+            Assert.Equal("Failed to generate a short link", exception.Message);
+        }
+
+        [Fact]
+        public async Task GenerateReferralShortLink_DeepLinkServiceFails_ThrowsException()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var referralCode = new ReferralCode { Code = "ABC123", UserId = userId };
+            _mockReferralCodeRepository.Setup(r => r.GetLatestByUserIdAsync(userId))
+                .ReturnsAsync(referralCode);
+            _mockDeepLinkService.Setup(d => d.GenerateDeepLinkAsync(It.IsAny<string>()))
+                .ThrowsAsync(new Exception("Deep link service error"));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<Exception>(
+                () => _service.GenerateReferralShortLink(userId));
+            Assert.Equal("Failed to generate a short link", exception.Message);
         }
 
         // Note: Add these tests when implementing CreateReferral and CompleteReferral methods
