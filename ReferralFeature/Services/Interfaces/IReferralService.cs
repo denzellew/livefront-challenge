@@ -5,14 +5,14 @@ namespace CartonCaps.ReferralFeature.Services.Interfaces
     public interface IReferralService
     {
 
-        string GetUserReferralCode(Guid userId);
+        Task<string> GetUserReferralCode(Guid userId);
 
-        List<Referral> GetUserReferrals(Guid userId);
+        Task<List<Referral>> GetUserReferrals(Guid userId);
 
-        string GenerateReferralShortLink(Guid userId);
+        Task<string> GenerateReferralShortLink(Guid userId);
 
-        Referral CreateReferral(string referralCode, Guid referreeId);
+        Task<Referral> CreateReferral(string referralCode, Guid referreeId);
 
-        Referral CompleteReferral(string referralId);
+        Task<Referral> CompleteReferral(string referralId);
     }
 }

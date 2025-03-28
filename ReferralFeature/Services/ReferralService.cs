@@ -20,27 +20,63 @@ namespace CartonCaps.ReferralFeature.Services
             _logger = logger;
         }
 
-        public string GetUserReferralCode(Guid userId)
+        public async Task<string> GetUserReferralCode(Guid userId)
         {
             // Get the latest referral code for the user
+            var referralCode = await _referralCodeRepository.GetLatestByUserIdAsync(userId);
 
             // If the user has no referral code, create a new one and save it
+            if (referralCode == null)
+            {
+                var code = "";
+                for (int attempts = 0; attempts < 10; attempts++)
+                {
+                    // Generate Code
+                    code = Guid.NewGuid().ToString().Substring(0, 6);
+
+                    // Check if the code is unique
+                    var existingCode = await _referralCodeRepository.GetByCodeAsync(code);
+
+                    // If the code is unique, break the loop
+                    if (existingCode == null)
+                    {
+                        break;
+                    }
+
+                    // If the code is not unique , try again
+                }
+
+                if (code == "")
+                {
+                    throw new Exception("Failed to generate a unique referral code");
+                }
+
+                var newReferralCode = new ReferralCode()
+                {
+                    Code = code,
+                    UserId = userId
+                };
+
+                referralCode = await _referralCodeRepository.AddAsync(newReferralCode);
+            }
 
             // Return the referral code
-            throw new NotImplementedException();
+            return referralCode.Code;
         }
 
-        public List<Referral> GetUserReferrals(Guid userId)
+        public async Task<List<Referral>> GetUserReferrals(Guid userId)
         {
             // Get all referral codes with referrals for the user
+            var referralCodes = await _referralCodeRepository.GetAllUserReferralsAsync(userId);
 
             // Flatten the referrals
+            var referrals = referralCodes.SelectMany(code => code.Referrals).ToList();
 
             // Return the referrals
-            throw new NotImplementedException();
+            return referrals;
         }
 
-        public string GenerateReferralShortLink(Guid userId)
+        public async Task<string> GenerateReferralShortLink(Guid userId)
         {
             // Get the referral code for the user
 
@@ -50,7 +86,7 @@ namespace CartonCaps.ReferralFeature.Services
             throw new NotImplementedException();
         }
 
-        public Referral CreateReferral(string referralCode, Guid referreeId)
+        public async Task<Referral> CreateReferral(string referralCode, Guid referreeId)
         {
             // Get the referral code by code
 
@@ -62,7 +98,7 @@ namespace CartonCaps.ReferralFeature.Services
             throw new NotImplementedException();
         }
 
-        public Referral CompleteReferral(string referralId)
+        public async Task<Referral> CompleteReferral(string referralId)
         {
             // Get the referral by id
 

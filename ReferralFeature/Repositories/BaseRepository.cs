@@ -30,16 +30,18 @@ namespace CartonCaps.ReferralFeature.Repositories
             return await _dbSet.Where(predicate).ToListAsync();
         }
 
-        public async Task AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
-            await _dbSet.AddAsync(entity);
+            var addedEntity = await _dbSet.AddAsync(entity);
             await SaveChangesAsync();
+            return addedEntity.Entity;
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task<T> UpdateAsync(T entity)
         {
-            _dbSet.Update(entity);
+            var updatedEntity = _dbSet.Update(entity);
             await SaveChangesAsync();
+            return updatedEntity.Entity;
         }
 
         public async Task DeleteAsync(T entity)

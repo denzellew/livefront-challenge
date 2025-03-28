@@ -20,7 +20,7 @@ public class ReferralController : ControllerBase
 
     [HttpGet("code", Name = "GetReferralCode")]
     [Authorize]
-    public IActionResult GetReferralCode()
+    public async Task<IActionResult> GetReferralCode()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
@@ -32,7 +32,7 @@ public class ReferralController : ControllerBase
         try
         {
             _logger.LogInformation("Getting referral code for user {UserId}", userId);
-            var referralCode = _referralService.GetUserReferralCode(Guid.Parse(userId));
+            var referralCode = await _referralService.GetUserReferralCode(Guid.Parse(userId));
             _logger.LogInformation("Successfully retrieved referral code for user {UserId}", userId);
             return Ok(referralCode);
         }
@@ -45,7 +45,7 @@ public class ReferralController : ControllerBase
 
     [HttpGet("referrals", Name = "GetReferrals")]
     [Authorize]
-    public IActionResult GetReferrals()
+    public async Task<IActionResult> GetReferrals()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
@@ -57,7 +57,7 @@ public class ReferralController : ControllerBase
         try
         {
             _logger.LogInformation("Getting referrals for user {UserId}", userId);
-            var referrals = _referralService.GetUserReferrals(Guid.Parse(userId));
+            var referrals = await _referralService.GetUserReferrals(Guid.Parse(userId));
             _logger.LogInformation("Successfully retrieved referrals for user {UserId}", userId);
             return Ok(referrals);
         }
@@ -70,7 +70,7 @@ public class ReferralController : ControllerBase
 
     [HttpPost("link", Name = "GenerateReferralShortLink")]
     [Authorize]
-    public IActionResult GenerateReferralShortLink()
+    public async Task<IActionResult> GenerateReferralShortLink()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
@@ -82,7 +82,7 @@ public class ReferralController : ControllerBase
         try
         {
             _logger.LogInformation("Generating referral short link for user {UserId}", userId);
-            var referralShortLink = _referralService.GenerateReferralShortLink(Guid.Parse(userId));
+            var referralShortLink = await _referralService.GenerateReferralShortLink(Guid.Parse(userId));
             _logger.LogInformation("Successfully generated referral short link for user {UserId}", userId);
             return Ok(referralShortLink);
         }
