@@ -1,5 +1,7 @@
 using CartonCaps;
 using CartonCaps.ReferralFeature.Data;
+using CartonCaps.ReferralFeature.Integrations;
+using CartonCaps.ReferralFeature.Integrations.Interfaces;
 using CartonCaps.ReferralFeature.Repositories;
 using CartonCaps.ReferralFeature.Repositories.Interfaces;
 using CartonCaps.ReferralFeature.Services;
@@ -23,6 +25,9 @@ builder.Services.AddDbContext<ReferralDbContext>(options =>
 builder.Services.AddScoped<IReferralCodeRepository, ReferralCodeRepository>();
 builder.Services.AddScoped<IReferralRepository, ReferralRepository>();
 
+// Register integrations
+builder.Services.AddScoped<IDeepLinkService, MockDeepLinkService>();
+builder.Services.AddScoped<IReferralCodeGenerator, ReferralCodeGenerator>();
 // Register services
 builder.Services.AddScoped<IReferralService, ReferralService>();
 
