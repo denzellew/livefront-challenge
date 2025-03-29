@@ -7,25 +7,22 @@ using CartonCaps.ReferralFeature.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace CartonCaps.Tests.ReferralFeature.FunctionalTests;
-public class ReferralControllerTests : IClassFixture<ReferralFeatureTestFactory>
+public class ReferralApiTests
 {
     private readonly ReferralFeatureTestFactory _factory;
     private readonly HttpClient _client;
     private readonly ReferralDbContext _dbContext;
     private readonly Guid _userId;
 
-    public ReferralControllerTests(ReferralFeatureTestFactory factory)
+    public ReferralApiTests()
     {
+        // Initialize a new instance of test factory for isolation
+        _factory = new ReferralFeatureTestFactory();
         _userId = Guid.NewGuid();
-        _factory = factory;
         _client = _factory.CreateAuthenticatedClient(_userId);
         _dbContext = _factory.GetDbContext();
     }
 
-    public void Dispose()
-    {
-        _factory.Dispose();
-    }
 
     [Fact]
     public async Task GetReferralCode_WhenUserDoesNotHaveCode_GeneratesNewCode()
@@ -77,7 +74,7 @@ public class ReferralControllerTests : IClassFixture<ReferralFeatureTestFactory>
         {
             Id = Guid.NewGuid(),
             UserId = _userId,
-            Code = "TEST123",
+            Code = "TESTCODE",
             CreatedAt = DateTime.UtcNow
         };
         _dbContext.ReferralCodes.Add(referralCode);
@@ -94,7 +91,7 @@ public class ReferralControllerTests : IClassFixture<ReferralFeatureTestFactory>
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var response = await _client.GetAsync("/api/referral");
+        var response = await _client.GetAsync("/api/referral/referrals");
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -109,34 +106,38 @@ public class ReferralControllerTests : IClassFixture<ReferralFeatureTestFactory>
     public async Task GenerateReferralShortLink_GeneratesAndReturnsLink()
     {
         // Arrange
+        string code = "TESTCODE";
         var referralCode = new ReferralCode
         {
             Id = Guid.NewGuid(),
             UserId = _userId,
-            Code = "TEST123",
+            Code = code,
             CreatedAt = DateTime.UtcNow
         };
         _dbContext.ReferralCodes.Add(referralCode);
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var response = await _client.GetAsync("/api/referral/short-link");
+        var response = await _client.PostAsJsonAsync("/api/referral/link", new { });
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var result = await response.Content.ReadFromJsonAsync<ReferralLinkDto>();
         Assert.NotNull(result);
-        Assert.Equal("https://cartoncaps.link/abc123", result.Link);
+        Assert.Equal($"https://cartoncaps.link/abfilefa90p?referralCode={code}", result.Link);
     }
 
     [Fact]
-    public async Task GenerateReferralShortLink_WithoutReferralCode_ReturnsBadRequest()
+    public async Task GenerateReferralShortLink_WithoutReferralCode_CreatesNewCodeAndReturnsLink()
     {
         // Act
-        var response = await _client.GetAsync("/api/referral/short-link");
+        var response = await _client.PostAsJsonAsync("/api/referral/link", new { });
 
         // Assert
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content.ReadFromJsonAsync<ReferralLinkDto>();
+        Assert.NotNull(result);
+        Assert.Equal("https://cartoncaps.link/abfilefa90p?referralCode=TEST123", result.Link);
     }
 
     // ... other tests ...

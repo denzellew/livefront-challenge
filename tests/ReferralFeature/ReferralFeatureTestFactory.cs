@@ -35,14 +35,6 @@ public class ReferralFeatureTestFactory : WebApplicationFactory<Program>
             // Configure mocks
             services.AddScoped(sp =>
             {
-                var mock = new Mock<IDeepLinkService>();
-                mock.Setup(x => x.GenerateDeepLinkAsync(It.IsAny<string>()))
-                    .ReturnsAsync("https://cartoncaps.link/abc123");
-                return mock.Object;
-            });
-
-            services.AddScoped(sp =>
-            {
                 var mock = new Mock<IReferralCodeGenerator>();
                 mock.Setup(x => x.GenerateReferralCode())
                     .Returns("TEST123");
