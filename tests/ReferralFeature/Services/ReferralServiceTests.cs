@@ -122,14 +122,14 @@ namespace CartonCaps.Tests.ReferralFeature.Services
             code1.Referrals.Add(new Referral
             {
                 Id = Guid.NewGuid(),
-                ReferreeId = Guid.NewGuid(),
+                RefereeId = Guid.NewGuid(),
                 ReferralCodeId = code1.Id,
                 CreatedAt = DateTime.UtcNow
             });
             code1.Referrals.Add(new Referral
             {
                 Id = Guid.NewGuid(),
-                ReferreeId = Guid.NewGuid(),
+                RefereeId = Guid.NewGuid(),
                 ReferralCodeId = code1.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -147,7 +147,7 @@ namespace CartonCaps.Tests.ReferralFeature.Services
             code2.Referrals.Add(new Referral
             {
                 Id = Guid.NewGuid(),
-                ReferreeId = Guid.NewGuid(),
+                RefereeId = Guid.NewGuid(),
                 ReferralCodeId = code2.Id,
                 CreatedAt = DateTime.UtcNow
             });

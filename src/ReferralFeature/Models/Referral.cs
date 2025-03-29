@@ -7,7 +7,7 @@ public class Referral
     public required Guid Id { get; set; }
     public required Guid ReferralCodeId { get; set; }
 
-    public required Guid ReferreeId { get; set; }
+    public required Guid RefereeId { get; set; }
 
     public ReferralStatus Status { get; set; }
 

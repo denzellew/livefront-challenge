@@ -30,7 +30,7 @@ public class ReferralDbContext : DbContext
         modelBuilder.Entity<Referral>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.ReferreeId).IsRequired();
+            entity.Property(e => e.RefereeId).IsRequired();
             entity.Property(e => e.Status).IsRequired();
             entity.Property(e => e.CreatedAt).IsRequired();
             entity.HasOne(e => e.ReferralCode).WithMany(e => e.Referrals).HasForeignKey(e => e.ReferralCodeId);

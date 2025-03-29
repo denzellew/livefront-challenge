@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using CartonCaps.ReferralFeature.Dtos;
 using CartonCaps.ReferralFeature.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,21 +21,16 @@ public class ReferralController : ControllerBase
 
     [HttpGet("code", Name = "GetReferralCode")]
     [Authorize]
-    public async Task<IActionResult> GetReferralCode()
+    public async Task<ActionResult<ReferralCodeDto>> GetReferralCode()
     {
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null)
-        {
-            _logger.LogWarning("Unauthorized access attempt to GetReferralCode");
-            return Unauthorized();
-        }
+        var userId = GetUserId();
 
         try
         {
             _logger.LogInformation("Getting referral code for user {UserId}", userId);
-            var referralCode = await _referralService.GetUserReferralCode(Guid.Parse(userId));
+            var referralCode = await _referralService.GetUserReferralCode(userId);
             _logger.LogInformation("Successfully retrieved referral code for user {UserId}", userId);
-            return Ok(referralCode);
+            return Ok(new ReferralCodeDto { Code = referralCode });
         }
         catch (Exception ex)
         {
@@ -45,21 +41,24 @@ public class ReferralController : ControllerBase
 
     [HttpGet("referrals", Name = "GetReferrals")]
     [Authorize]
-    public async Task<IActionResult> GetReferrals()
+    public async Task<ActionResult<IEnumerable<ReferralDto>>> GetReferrals()
     {
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null)
-        {
-            _logger.LogWarning("Unauthorized access attempt to GetReferrals");
-            return Unauthorized();
-        }
+        var userId = GetUserId();
 
         try
         {
             _logger.LogInformation("Getting referrals for user {UserId}", userId);
-            var referrals = await _referralService.GetUserReferrals(Guid.Parse(userId));
+            var referrals = await _referralService.GetUserReferrals(userId);
             _logger.LogInformation("Successfully retrieved referrals for user {UserId}", userId);
-            return Ok(referrals);
+
+            var result = referrals.Select(r => new ReferralDto
+            {
+                Id = r.Id.ToString(),
+                RefereeId = r.RefereeId.ToString(),
+                Status = r.Status.ToString(),
+                CompletedAt = r.CompletedAt ?? DateTime.MinValue
+            });
+            return Ok(result);
         }
         catch (Exception ex)
         {
@@ -70,26 +69,27 @@ public class ReferralController : ControllerBase
 
     [HttpPost("link", Name = "GenerateReferralShortLink")]
     [Authorize]
-    public async Task<IActionResult> GenerateReferralShortLink()
+    public async Task<ActionResult<ReferralLinkDto>> GenerateReferralShortLink()
     {
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null)
-        {
-            _logger.LogWarning("Unauthorized access attempt to GenerateReferralShortLink");
-            return Unauthorized();
-        }
+        var userId = GetUserId();
 
         try
         {
             _logger.LogInformation("Generating referral short link for user {UserId}", userId);
-            var referralShortLink = await _referralService.GenerateReferralShortLink(Guid.Parse(userId));
+            var referralShortLink = await _referralService.GenerateReferralShortLink(userId);
             _logger.LogInformation("Successfully generated referral short link for user {UserId}", userId);
-            return Ok(referralShortLink);
+            return Ok(new ReferralLinkDto { Link = referralShortLink });
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error generating referral short link for user {UserId}", userId);
             return StatusCode(500, ex.Message);
         }
+    }
+
+    private Guid GetUserId()
+    {
+        var userId = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value) ?? throw new UnauthorizedAccessException("User ID not found");
+        return Guid.Parse(userId);
     }
 }
