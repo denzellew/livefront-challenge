@@ -19,7 +19,7 @@ builder.Services.AddControllers();
 
 // Add DbContext
 builder.Services.AddDbContext<ReferralDbContext>(options =>
-    options.UseInMemoryDatabase("ReferralDb"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register repositories
 builder.Services.AddScoped<IReferralCodeRepository, ReferralCodeRepository>();
@@ -56,17 +56,20 @@ if (app.Environment.IsDevelopment())
     app.UseMiddleware<FakeJwtUserMiddleware>();
     app.MapOpenApi();
 }
-app.UseHttpsRedirection();
 
-// if (app.Environment.IsProduction())
-// {
-//     
-// }
+app.UseHttpsRedirection();
 
 // Add authentication middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Ensure database is created
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ReferralDbContext>();
+    context.Database.EnsureCreated();
+}
 
 app.Run();

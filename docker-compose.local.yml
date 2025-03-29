@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      dockerfile: Dockerfile.local    # This ensures we use the build stage with the SDK
+    volumes:
+      - ./src:/app/src
+      - app_bin:/app/src/bin
+      - app_obj:/app/src/obj
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOCKER_ENVIRONMENT=true
+      - ConnectionStrings__DefaultConnection=Server=db;Database=CartonCaps;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True 
+
+volumes:
+  app_bin:
+  app_obj: 

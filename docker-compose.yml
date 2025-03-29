@@ -1,0 +1,25 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db;Database=CartonCaps;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong!Passw0rd
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+volumes:
+  sqlserver_data: 
