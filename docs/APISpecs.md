@@ -59,9 +59,11 @@ We assume deferred deep link support is handled by a third-party vendor (e.g., F
 
 #### Request
 
-- Headers: `Authorization: Bearer <token>`
-  **_For Testing Purposes:_**
-- Query: numReferrals
+- Headers:
+  - `Authorization: Bearer <token>`
+- **_For Testing Purposes:_**
+  - Query: numReferrals
+    - **How many generated referrals you want returned**
 
 #### Response
 

@@ -8,9 +8,10 @@
 
 ## How To Run the Application
 
-### Generate a JWT with Random User Id
+### Generate a JWT
 
-`sh generate-fake-jwt.sh`
+- **Random User Id:** `sh generate-fake-jwt.sh`
+- **Existing User Id:** `sh generate-fake-jwt.sh {Exising-User-UUID}
 
 ### Running locally (In Memory Database)
 
@@ -20,7 +21,7 @@
 
 `dotnet test`
 
-### Run In Docker - Production Settings
+### Run In Docker - Dev Settings
 
 `docker compose -f docker-compose.yml -f docker-compose.local.yml up --build`
 
