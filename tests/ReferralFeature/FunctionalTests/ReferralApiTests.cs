@@ -139,6 +139,4 @@ public class ReferralApiTests
         Assert.NotNull(result);
         Assert.Equal("https://cartoncaps.link/abfilefa90p?referralCode=TEST123", result.Link);
     }
-
-    // ... other tests ...
 }
