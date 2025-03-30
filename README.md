@@ -11,7 +11,7 @@
 ### Generate a JWT
 
 - **Random User Id:** `sh generate-fake-jwt.sh`
-- **Existing User Id:** `sh generate-fake-jwt.sh {Exising-User-UUID}
+- **Existing User Id:** `sh generate-fake-jwt.sh {Exising-User-UUID}`
 
 ### Running locally (In Memory Database)
 
