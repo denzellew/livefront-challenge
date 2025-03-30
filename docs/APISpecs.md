@@ -146,8 +146,9 @@ Tracks which users have signed up using a referral code.
 | id               | UUID / PK   | Unique identifier for the referral            |
 | referral_code_id | UUID        | Foreign key to Referral_Codes table (indexed) |
 | referee_id       | UUID        | User who used the referral code               |
-| status           | ENUM/String | Status of referral (e.g., claimed, rewarded)  |
-| claim_dt         | TIMESTAMP   | Date/time referral was claimed                |
+| status           | ENUM/String | Status of referral (e.g., pending, complete)  |
+| created_dt       | TIMESTAMP   | Date/time referral was created                |
+| completed_dt     | TIMESTAMP   | Date/time referral was completed              |
 
 ---
 
