@@ -13,6 +13,10 @@
 - **Random User Id:** `sh generate-fake-jwt.sh`
 - **Existing User Id:** `sh generate-fake-jwt.sh {Exising-User-UUID}`
 
+### Install Dependencies
+
+`dotnet restore`
+
 ### Running locally (In Memory Database)
 
 `dotnet run --project src/CartonCaps.csproj`
