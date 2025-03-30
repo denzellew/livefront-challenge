@@ -16,13 +16,24 @@ public class ReferralFeatureTestFactory : WebApplicationFactory<Program>
     {
         // Set the environment variable for the test
         Environment.SetEnvironmentVariable("DatabaseProvider", "InMemory");
-        _databaseName = Guid.NewGuid().ToString();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
+            // Remove existing db context registration
+            var descriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions<ReferralDbContext>));
+            if (descriptor != null)
+                services.Remove(descriptor);
+
+            // Generate a unique database name for each test run
+            var databaseName = Guid.NewGuid().ToString();
+
+            // Add in-memory database with a unique name
+            services.AddDbContext<ReferralDbContext>(options =>
+                options.UseInMemoryDatabase(databaseName));
 
             // Configure mocks
             services.AddScoped(sp =>
@@ -39,6 +50,15 @@ public class ReferralFeatureTestFactory : WebApplicationFactory<Program>
     {
         var client = CreateClient();
 
+        var token = CreateJwtToken(userId);
+
+        client.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        return client;
+    }
+
+    public string CreateJwtToken(Guid userId)
+    {
         // Create JWT payload with userId as sub claim
         var payload = new Dictionary<string, object>
         {
@@ -67,9 +87,7 @@ public class ReferralFeatureTestFactory : WebApplicationFactory<Program>
 
         var token = $"{headerBase64}.{payloadBase64}.{signature}";
 
-        client.DefaultRequestHeaders.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-        return client;
+        return token;
     }
 
     public ReferralDbContext GetDbContext()

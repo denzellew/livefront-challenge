@@ -70,11 +70,11 @@ namespace CartonCaps.Tests.ReferralFeature.Services
             };
 
             _mockReferralCodeRepository.Setup(r => r.GetLatestByUserIdAsync(userId))
-                .ReturnsAsync((ReferralCode)null);
+                .ReturnsAsync(null as ReferralCode);
             _mockReferralCodeGenerator.Setup(g => g.GenerateReferralCode())
                 .Returns(generatedCode);
             _mockReferralCodeRepository.Setup(r => r.GetByCodeAsync(generatedCode))
-                .ReturnsAsync((ReferralCode)null);
+                .ReturnsAsync(null as ReferralCode);
             _mockReferralCodeRepository.Setup(r => r.AddAsync(It.IsAny<ReferralCode>()))
                 .ReturnsAsync(newReferralCode);
 
@@ -93,7 +93,7 @@ namespace CartonCaps.Tests.ReferralFeature.Services
             // Arrange
             var userId = Guid.NewGuid();
             _mockReferralCodeRepository.Setup(r => r.GetLatestByUserIdAsync(userId))
-                .ReturnsAsync((ReferralCode)null);
+                .ReturnsAsync(null as ReferralCode);
             _mockReferralCodeRepository.Setup(r => r.GetByCodeAsync(It.IsAny<string>()))
                 .ReturnsAsync(new ReferralCode() { Id = Guid.NewGuid(), Code = "DUPLICATE", UserId = userId });
 
@@ -216,7 +216,7 @@ namespace CartonCaps.Tests.ReferralFeature.Services
             // Arrange
             var userId = Guid.NewGuid();
             _mockReferralCodeRepository.Setup(r => r.GetLatestByUserIdAsync(userId))
-                .ReturnsAsync((ReferralCode)null);
+                .ReturnsAsync(null as ReferralCode);
             _mockReferralCodeGenerator.Setup(g => g.GenerateReferralCode())
                 .Returns("DUPLICATE");
             _mockReferralCodeRepository.Setup(r => r.GetByCodeAsync("DUPLICATE"))
