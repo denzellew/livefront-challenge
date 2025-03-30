@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Bogus;
 using CartonCaps.ReferralFeature.Dtos;
 using CartonCaps.ReferralFeature.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CartonCaps.ReferralFeature.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 public class ReferralController : ControllerBase
 {
     private readonly ILogger<ReferralController> _logger;
@@ -41,7 +42,7 @@ public class ReferralController : ControllerBase
 
     [HttpGet("referrals", Name = "GetReferrals")]
     [Authorize]
-    public async Task<ActionResult<IEnumerable<ReferralDto>>> GetReferrals()
+    public async Task<ActionResult<IEnumerable<ReferralDto>>> GetReferrals([FromQuery] int? numReferrals = null)
     {
         var userId = GetUserId();
 
@@ -51,13 +52,33 @@ public class ReferralController : ControllerBase
             var referrals = await _referralService.GetUserReferrals(userId);
             _logger.LogInformation("Successfully retrieved referrals for user {UserId}", userId);
 
-            var result = referrals.Select(r => new ReferralDto
+            var result = new List<ReferralDto>();
+            //TODO: Remove this once we have a real referral system
+            if (referrals.Count == 0 && numReferrals.HasValue)
             {
-                Id = r.Id.ToString(),
-                RefereeId = r.RefereeId.ToString(),
-                Status = r.Status.ToString(),
-                CompletedAt = r.CompletedAt ?? DateTime.MinValue
-            });
+                _logger.LogInformation("Mocking {numReferrals} referral as there are no real referrals", numReferrals.Value);
+                var faker = new Faker();
+                result = Enumerable.Range(0, numReferrals.Value).Select(i => new ReferralDto
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    RefereeId = Guid.NewGuid().ToString(),
+                    RefereeName = $"{faker.Name.FirstName()} {faker.Name.LastName()[0]}",
+                    Status = "Completed",
+                    CompletedAt = DateTime.Now
+                }).ToList();
+            }
+            else
+            {
+                result = referrals.Select(r => new ReferralDto
+                {
+                    Id = r.Id.ToString(),
+                    RefereeId = r.RefereeId.ToString(),
+                    RefereeName = r.RefereeId.ToString(), // TODO: Link to user profile, and use the user's name
+                    Status = r.Status.ToString(),
+                    CompletedAt = r.CompletedAt ?? DateTime.MinValue
+                }).ToList();
+            }
+
             return Ok(result);
         }
         catch (Exception ex)

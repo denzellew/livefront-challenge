@@ -18,8 +18,19 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
 // Add DbContext
+var provider = builder.Configuration.GetValue<string>("DatabaseProvider");
+
 builder.Services.AddDbContext<ReferralDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    if (provider == "InMemory")
+    {
+        options.UseInMemoryDatabase("TestDatabase");
+    }
+    else
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    }
+});
 
 // Register repositories
 builder.Services.AddScoped<IReferralCodeRepository, ReferralCodeRepository>();

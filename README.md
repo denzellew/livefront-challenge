@@ -1,17 +1,17 @@
 # livefront-challenge
 
-## Running the application locally
+## Running locally (In Memory Database)
 
 `dotnet run --project src/CartonCaps.csproj`
 
-## Running test
+## Running test (In Memory Database)
 
 `dotnet test`
 
 # Run with development settings (hot reload)
 
-`docker compose up -f docker-compose.yml -f docker-compose.local.yml`
+`docker compose -f docker-compose.yml -f docker-compose.local.yml up --build`
 
 # Run with production settings only
 
-`docker compose up`
+`docker compose up --build`

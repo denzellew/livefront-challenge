@@ -28,7 +28,7 @@ public class ReferralApiTests
     public async Task GetReferralCode_WhenUserDoesNotHaveCode_GeneratesNewCode()
     {
         // Act
-        var response = await _client.GetAsync("/api/referral/code");
+        var response = await _client.GetAsync("/api/v1/referral/code");
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -57,7 +57,7 @@ public class ReferralApiTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var response = await _client.GetAsync("/api/referral/code");
+        var response = await _client.GetAsync("/api/v1/referral/code");
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -91,7 +91,7 @@ public class ReferralApiTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var response = await _client.GetAsync("/api/referral/referrals");
+        var response = await _client.GetAsync("/api/v1/referral/referrals");
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -118,7 +118,7 @@ public class ReferralApiTests
         await _dbContext.SaveChangesAsync();
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/referral/link", new { });
+        var response = await _client.PostAsJsonAsync("/api/v1/referral/link", new { });
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -131,7 +131,7 @@ public class ReferralApiTests
     public async Task GenerateReferralShortLink_WithoutReferralCode_CreatesNewCodeAndReturnsLink()
     {
         // Act
-        var response = await _client.PostAsJsonAsync("/api/referral/link", new { });
+        var response = await _client.PostAsJsonAsync("/api/v1/referral/link", new { });
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

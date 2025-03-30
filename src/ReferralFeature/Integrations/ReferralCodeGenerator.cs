@@ -6,6 +6,6 @@ public class ReferralCodeGenerator : IReferralCodeGenerator
 {
     public string GenerateReferralCode()
     {
-        return Guid.NewGuid().ToString().Substring(0, 6);
+        return Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
     }
 }

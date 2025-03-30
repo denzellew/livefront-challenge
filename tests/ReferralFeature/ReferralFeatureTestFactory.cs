@@ -14,6 +14,8 @@ public class ReferralFeatureTestFactory : WebApplicationFactory<Program>
 
     public ReferralFeatureTestFactory()
     {
+        // Set the environment variable for the test
+        Environment.SetEnvironmentVariable("DatabaseProvider", "InMemory");
         _databaseName = Guid.NewGuid().ToString();
     }
 
@@ -21,15 +23,6 @@ public class ReferralFeatureTestFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            // Remove existing db context registration
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<ReferralDbContext>));
-            if (descriptor != null)
-                services.Remove(descriptor);
-
-            // Add in-memory database
-            services.AddDbContext<ReferralDbContext>(options =>
-                options.UseInMemoryDatabase(_databaseName));
 
             // Configure mocks
             services.AddScoped(sp =>
