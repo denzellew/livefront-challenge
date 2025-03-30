@@ -1,4 +1,3 @@
-using System;
 using CartonCaps.ReferralFeature.Integrations.Interfaces;
 
 namespace CartonCaps.ReferralFeature.Integrations;
