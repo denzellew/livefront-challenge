@@ -1,17 +1,29 @@
 # livefront-challenge
 
-## Running locally (In Memory Database)
+## Documentation
+
+### [API Specifications and Challenge Answers](./docs/APISpecs.md)
+
+### [Full System Design](./docs/SystemDesign.md)
+
+## How To Run the Application
+
+### Generate a JWT with Random User Id
+
+`sh generate-fake-jwt.sh`
+
+### Running locally (In Memory Database)
 
 `dotnet run --project src/CartonCaps.csproj`
 
-## Running test (In Memory Database)
+### Running test (In Memory Database)
 
 `dotnet test`
 
-# Run with development settings (hot reload)
+### Run In Docker - Production Settings
 
 `docker compose -f docker-compose.yml -f docker-compose.local.yml up --build`
 
-# Run with production settings only
+### Run In Docker - Production Settings
 
 `docker compose up --build`
